@@ -1,6 +1,6 @@
 {
   "name": "pi-ui-design",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Visual frontend prototyping tool for pi — drag, drop, theme, export code in HTML/React/Tailwind",
   "keywords": [
     "pi-package",
