@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>UI Design Prototyper — pi</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <!-- Top Bar -->
+      <header id="topbar">
+        <div class="topbar-left">
+          <span class="logo">◈ ui-design</span>
+        </div>
+        <div class="topbar-center">
+          <div class="theme-group">
+            <label
+              >Primary <input type="color" id="theme-primary" value="#024345"
+            /></label>
+            <label
+              >Secondary
+              <input type="color" id="theme-secondary" value="#03706b"
+            /></label>
+            <label
+              >Bg <input type="color" id="theme-bg" value="#ffffff"
+            /></label>
+            <label
+              >Text <input type="color" id="theme-text" value="#1f2937"
+            /></label>
+          </div>
+          <div class="theme-group">
+            <label
+              >Spacing
+              <select id="theme-spacing">
+                <option value="compact">Compact</option>
+                <option value="normal" selected>Normal</option>
+                <option value="spacious">Spacious</option>
+              </select>
+            </label>
+            <label
+              >Radius
+              <select id="theme-radius">
+                <option value="none">None</option>
+                <option value="sm">Small</option>
+                <option value="md" selected>Medium</option>
+                <option value="lg">Large</option>
+                <option value="xl">XL</option>
+              </select>
+            </label>
+          </div>
+          <div class="theme-group">
+            <label
+              >Font
+              <select id="theme-font">
+                <option value="Inter, sans-serif">Inter</option>
+                <option value="'Georgia', serif">Georgia</option>
+                <option value="'Space Grotesk', sans-serif">
+                  Space Grotesk
+                </option>
+                <option value="'DM Sans', sans-serif">DM Sans</option>
+                <option value="'JetBrains Mono', monospace">
+                  JetBrains Mono
+                </option>
+              </select>
+            </label>
+            <label class="toggle-label">
+              <input type="checkbox" id="theme-dark" checked /> Dark mode
+            </label>
+          </div>
+        </div>
+        <div class="topbar-right">
+          <span id="status-badge" class="badge">Ready</span>
+        </div>
+      </header>
+
+      <!-- Main Layout -->
+      <div id="main">
+        <!-- Left: Palette -->
+        <aside id="palette">
+          <div class="panel-header">
+            <h3>Components</h3>
+            <input
+              type="text"
+              id="palette-search"
+              placeholder="Search..."
+              class="search-input"
+            />
+          </div>
+          <div id="palette-categories"></div>
+          <div id="palette-resize"></div>
+        </aside>
+
+        <!-- Center: Canvas + Properties -->
+        <div id="center">
+          <div id="canvas-toolbar">
+            <span id="canvas-count">0 components</span>
+            <button id="btn-clear" class="btn-sm" title="Clear all">
+              Clear
+            </button>
+            <button
+              id="btn-export"
+              class="btn-sm btn-primary"
+              title="Export design"
+            >
+              Export
+            </button>
+            <button
+              id="btn-toggle-code"
+              class="btn-sm"
+              title="Toggle code panel"
+            >
+              ◈ Code
+            </button>
+          </div>
+          <div id="canvas">
+            <div id="canvas-empty">
+              Click components from the palette to start building
+            </div>
+            <div id="canvas-list"></div>
+          </div>
+          <div id="properties-panel">
+            <div class="panel-header">
+              <h3>Properties</h3>
+            </div>
+            <div id="properties-content">
+              <p class="muted">Select a component on the canvas</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Code Output -->
+        <aside id="code-panel">
+          <div class="panel-header">
+            <h3>Code</h3>
+            <div class="code-controls">
+              <select id="code-format">
+                <option value="html">HTML+CSS</option>
+                <option value="react">React JSX</option>
+                <option value="tailwind">Tailwind</option>
+              </select>
+              <button id="btn-copy" class="btn-sm" title="Copy code">
+                Copy
+              </button>
+            </div>
+          </div>
+          <pre
+            id="code-output"
+          ><code class="language-html">&lt;!-- Add components to generate code --&gt;</code></pre>
+        </aside>
+      </div>
+
+      <!-- Bottom Bar -->
+      <footer id="bottombar">
+        <span id="save-status">💾 Auto-save enabled</span>
+        <span id="component-count">0 components</span>
+        <span id="server-status">Server: active</span>
+      </footer>
+    </div>
+
+    <textarea
+      id="copy-buffer"
+      style="position: fixed; left: -9999px; top: 0"
+      aria-hidden="true"
+    ></textarea>
+    <script src="app.js"></script>
+  </body>
+</html>

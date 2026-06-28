@@ -1,0 +1,25 @@
+{
+  "name": "pi-ui-design",
+  "version": "1.0.0",
+  "description": "Visual frontend prototyping tool for pi — drag, drop, theme, export code in HTML/React/Tailwind",
+  "keywords": ["pi-package", "ui-design", "prototyping", "frontend"],
+  "license": "MIT",
+  "type": "module",
+  "pi": {
+    "extensions": ["./index.ts"],
+    "image": "https://pi.dev/screenshot.png"
+  },
+  "files": [
+    "index.ts",
+    "public/",
+    "README.md"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/biurea/pi-ui-design.git"
+  },
+  "bugs": {
+    "url": "https://github.com/biurea/pi-ui-design/issues"
+  },
+  "homepage": "https://github.com/biurea/pi-ui-design#readme"
+}

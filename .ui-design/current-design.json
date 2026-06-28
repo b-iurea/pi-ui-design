@@ -1,0 +1,17 @@
+{
+  "tree": {
+    "id": "root",
+    "type": "root",
+    "children": []
+  },
+  "theme": {
+    "primary": "#08949b",
+    "secondary": "#03706b",
+    "bg": "#ffffff",
+    "text": "#1f2937",
+    "spacing": "normal",
+    "radius": "md",
+    "font": "Inter, sans-serif",
+    "dark": true
+  }
+}
