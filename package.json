@@ -6,8 +6,7 @@
   "license": "MIT",
   "type": "module",
   "pi": {
-    "extensions": ["./index.ts"],
-    "image": "https://pi.dev/screenshot.png"
+    "extensions": ["./index.ts"]
   },
   "files": [
     "index.ts",
