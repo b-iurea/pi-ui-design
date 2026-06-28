@@ -13,12 +13,14 @@
   "pi": {
     "extensions": [
       "./index.ts"
-    ]
+    ],
+    "image": "https://raw.githubusercontent.com/b-iurea/pi-ui-design/main/screenshot.png"
   },
   "files": [
     "index.ts",
     "public/",
-    "README.md"
+    "README.md",
+    "screenshot.png"
   ],
   "repository": {
     "type": "git",
