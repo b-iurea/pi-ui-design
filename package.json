@@ -14,13 +14,13 @@
     "extensions": [
       "./index.ts"
     ],
-    "image": "https://raw.githubusercontent.com/b-iurea/pi-ui-design/main/screenshot.png"
+    "image": "https://raw.githubusercontent.com/b-iurea/pi-ui-design/main/docs/screenshot.png"
   },
   "files": [
     "index.ts",
     "public/",
     "README.md",
-    "screenshot.png"
+    "docs/"
   ],
   "repository": {
     "type": "git",
@@ -29,8 +29,5 @@
   "bugs": {
     "url": "https://github.com/biurea/pi-ui-design/issues"
   },
-  "homepage": "https://github.com/biurea/pi-ui-design#readme",
-  "dependencies": {
-    "playwright": "^1.61.1"
-  }
+  "homepage": "https://github.com/biurea/pi-ui-design#readme"
 }

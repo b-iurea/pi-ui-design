@@ -8,6 +8,8 @@ Visual frontend prototyping tool for [pi](https://github.com/earendil-works/pi-c
 /pi: ui-design status  → check if running
 ```
 
+![ui-design screenshot](docs/screenshot.png)
+
 ## Install
 
 Clone into your pi extensions folder:
@@ -107,3 +109,7 @@ ui-design/
 ## Contributing
 
 It's one HTML file, one CSS, one JS, one server. Open `public/app.js` and go.
+
+---
+
+Author: [biurea](https://github.com/b-iurea)
