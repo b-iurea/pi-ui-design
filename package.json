@@ -1,12 +1,19 @@
 {
   "name": "pi-ui-design",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Visual frontend prototyping tool for pi — drag, drop, theme, export code in HTML/React/Tailwind",
-  "keywords": ["pi-package", "ui-design", "prototyping", "frontend"],
+  "keywords": [
+    "pi-package",
+    "ui-design",
+    "prototyping",
+    "frontend"
+  ],
   "license": "MIT",
   "type": "module",
   "pi": {
-    "extensions": ["./index.ts"]
+    "extensions": [
+      "./index.ts"
+    ]
   },
   "files": [
     "index.ts",
