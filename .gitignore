@@ -1,2 +1,4 @@
 .tokensave
 .ui-design/
+node_modules/
+package-lock.json
