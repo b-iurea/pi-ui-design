@@ -75,15 +75,21 @@ function getChildren(node) {
 
 /* ===== UNDO / REDO ===== */
 function pushHistory() {
-	history = history.slice(0, historyPtr + 1);
+	// ponytail: save state AFTER mutation — history always stores the state at entry time
+	history.length = historyPtr + 1;
 	history.push({
 		tree: JSON.parse(JSON.stringify(state.tree)),
 		selectedId: state.selectedId,
 		nodeNames: { ...nodeNames },
 	});
-	if (history.length > MAX_HISTORY) history.shift();
 	historyPtr = history.length - 1;
+	if (history.length > MAX_HISTORY) { history.shift(); historyPtr--; }
 	updateUndoButtons();
+}
+function initHistory() {
+	history = [];
+	historyPtr = -1;
+	pushHistory();
 }
 function undo() {
 	if (historyPtr <= 0) return;
@@ -1578,7 +1584,8 @@ function renderLayers() {
 	const list = document.getElementById("layers-list");
 	if (!list) return;
 	if (totalComponents() === 0) {
-		list.innerHTML = '<div style="padding:8px 12px;font-size:11px;color:var(--text2);opacity:.5">No components</div>';
+		list.innerHTML =
+			'<div style="padding:8px 12px;font-size:11px;color:var(--text2);opacity:.5">No components</div>';
 		return;
 	}
 	list.innerHTML = renderLayerNode(state.tree, 0);
@@ -1603,7 +1610,6 @@ function renderLayerNode(node, depth) {
 function addComponent(type) {
 	const def = COMPONENTS[type];
 	if (!def) return;
-	pushHistory();
 	const id = "c" + state.nextId++;
 	const node = { id, type, props: { ...def.props }, children: [] };
 	nodeNames[id] = generateNodeName(type);
@@ -1622,6 +1628,7 @@ function addComponent(type) {
 	state.selectedId = id;
 	render();
 	scheduleSave();
+	pushHistory();
 }
 
 function addChild(parentId) {
@@ -1642,23 +1649,22 @@ function selectComponent(id) {
 function updateProp(id, key, value) {
 	const c = findNode(state.tree, id);
 	if (!c) return;
-	pushHistory();
 	c.props[key] = value;
 	render();
 	scheduleSave();
+	pushHistory();
 }
 
 function deleteComponent(id) {
 	if (id === "root") return;
-	pushHistory();
 	removeNode(state.tree, id);
 	if (state.selectedId === id) state.selectedId = null;
 	render();
 	scheduleSave();
+	pushHistory();
 }
 
 function moveComponent(id, dir) {
-	pushHistory();
 	const parent = findParent(state.tree, id);
 	if (!parent || !parent.children) return;
 	const idx = parent.children.findIndex((x) => x.id === id);
@@ -1675,11 +1681,11 @@ function moveComponent(id, dir) {
 		];
 	render();
 	scheduleSave();
+	pushHistory();
 }
 
 function clearAll() {
 	if (totalComponents() === 0) return;
-	pushHistory();
 	state.tree.children = [];
 	state.selectedId = null;
 	render();
@@ -1784,10 +1790,9 @@ document.addEventListener("dragover", (e) => {
 });
 
 document.addEventListener("drop", (e) => {
-	e.preventDefault();
-	if (!_dragInfo) return;
-	pushHistory();
-	const canvas = document.getElementById("canvas");
+e.preventDefault();
+if (!_dragInfo) return;
+const canvas = document.getElementById("canvas");
 	canvas.classList.remove("drag-over-canvas");
 	document
 		.querySelectorAll(".drag-over,.childzone-active")
@@ -1849,9 +1854,10 @@ document.addEventListener("drop", (e) => {
 			state.tree.children.splice(targetIdx, 0, item);
 		}
 
-		state.selectedId = srcId;
+			state.selectedId = srcId;
 		render();
 		scheduleSave();
+		pushHistory();
 	}
 	_dragInfo = null;
 });
@@ -2094,6 +2100,7 @@ document.addEventListener("DOMContentLoaded", () => {
 				);
 			}
 			render();
+			initHistory();
 		})
 		.catch(() => render());
 });
