@@ -201,9 +201,11 @@ body {
 .search-input:focus {
 	border-color: var(--layout-color);
 }
-#palette-categories {
+#palette-body {
 	flex: 1;
 	overflow-y: auto;
+}
+#palette-categories {
 	padding: 4px 0;
 }
 .palette-category {
@@ -217,6 +219,72 @@ body {
 	padding: 8px 12px 4px;
 	font-weight: 600;
 	opacity: 0.6;
+}
+
+/* ===== Layers Panel ===== */
+#layers-section {
+	border-top: 1px solid var(--border);
+	padding: 4px 0;
+}
+.layers-header {
+	font-size: 10px;
+	text-transform: uppercase;
+	letter-spacing: 0.8px;
+	color: var(--text2);
+	padding: 8px 12px 4px;
+	font-weight: 600;
+	opacity: 0.6;
+}
+#layers-list {
+	display: flex;
+	flex-direction: column;
+	gap: 1px;
+}
+.layer-item {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	padding: 4px 8px 4px 12px;
+	font-size: 12px;
+	color: var(--text);
+	cursor: pointer;
+	border-left: 2px solid transparent;
+	transition: background 0.1s;
+}
+.layer-item:hover {
+	background: var(--bg3);
+}
+.layer-item.selected {
+	background: color-mix(in srgb, var(--accent) 15%, transparent);
+	border-left-color: var(--accent);
+}
+.layer-item .layer-arrow {
+	width: 14px;
+	flex-shrink: 0;
+	text-align: center;
+	font-size: 10px;
+	color: var(--text2);
+	opacity: 0.5;
+}
+.layer-item .layer-icon {
+	width: 18px;
+	text-align: center;
+	flex-shrink: 0;
+	font-size: 14px;
+}
+.layer-item .layer-name {
+	flex: 1;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	font-size: 12px;
+}
+.layer-item .layer-type {
+	font-size: 10px;
+	color: var(--text2);
+	opacity: 0.6;
+	margin-left: auto;
+	flex-shrink: 0;
 }
 .palette-item {
 	display: flex;

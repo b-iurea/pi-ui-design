@@ -28,6 +28,12 @@ const CONTAINER_TYPES = new Set([
 	"root",
 ]);
 
+let history = [];
+let historyPtr = -1;
+const MAX_HISTORY = 50;
+let nodeNames = {};
+let nodeNameCounts = {};
+
 /* ===== TREE HELPERS ===== */
 function findNode(node, id) {
 	if (node.id === id) return node;
@@ -65,6 +71,51 @@ function totalComponents() {
 
 function getChildren(node) {
 	return node.children || [];
+}
+
+/* ===== UNDO / REDO ===== */
+function pushHistory() {
+	history = history.slice(0, historyPtr + 1);
+	history.push({
+		tree: JSON.parse(JSON.stringify(state.tree)),
+		selectedId: state.selectedId,
+		nodeNames: { ...nodeNames },
+	});
+	if (history.length > MAX_HISTORY) history.shift();
+	historyPtr = history.length - 1;
+	updateUndoButtons();
+}
+function undo() {
+	if (historyPtr <= 0) return;
+	historyPtr--;
+	applyHistory();
+}
+function redo() {
+	if (historyPtr >= history.length - 1) return;
+	historyPtr++;
+	applyHistory();
+}
+function applyHistory() {
+	const h = history[historyPtr];
+	state.tree = JSON.parse(JSON.stringify(h.tree));
+	state.selectedId = h.selectedId;
+	nodeNames = h.nodeNames ? { ...h.nodeNames } : {};
+	render();
+	scheduleSave();
+	updateUndoButtons();
+}
+function updateUndoButtons() {
+	const u = document.getElementById("btn-undo");
+	const r = document.getElementById("btn-redo");
+	if (u) u.disabled = historyPtr <= 0;
+	if (r) r.disabled = historyPtr >= history.length - 1;
+}
+
+/* ===== AUTO NAMES ===== */
+function generateNodeName(type) {
+	const label = COMPONENTS[type]?.label || type;
+	nodeNameCounts[type] = (nodeNameCounts[type] || 0) + 1;
+	return `${label} ${nodeNameCounts[type]}`;
 }
 
 /* ===== COMPONENT DEFINITIONS ===== */
@@ -637,7 +688,8 @@ function renderTreeNode(node, depth) {
 	const preview = renderPreview(node.type, node.props, childrenHtml);
 
 	const def = COMPONENTS[node.type];
-	const label = def ? def.icon + " " + def.label : node.type;
+	const displayName = nodeNames[node.id] || def?.label || node.type;
+	const label = (def ? def.icon + " " : "") + displayName;
 	const countLabel =
 		isCont && childrenArr.length > 0
 			? ` · ${childrenArr.length} child${childrenArr.length !== 1 ? "ren" : ""}`
@@ -1421,6 +1473,7 @@ function render() {
 	renderCode();
 	renderProperties();
 	updateCounts();
+	renderLayers();
 }
 
 function renderPalette() {
@@ -1520,12 +1573,40 @@ function updateCounts() {
 	document.getElementById("component-count").textContent = `${n} components`;
 }
 
+/* ===== LAYERS PANEL ===== */
+function renderLayers() {
+	const list = document.getElementById("layers-list");
+	if (!list) return;
+	if (totalComponents() === 0) {
+		list.innerHTML = '<div style="padding:8px 12px;font-size:11px;color:var(--text2);opacity:.5">No components</div>';
+		return;
+	}
+	list.innerHTML = renderLayerNode(state.tree, 0);
+}
+function renderLayerNode(node, depth) {
+	if (node.type === "root") {
+		return (node.children || []).map((c) => renderLayerNode(c, depth)).join("");
+	}
+	const sel = node.id === state.selectedId ? " selected" : "";
+	const def = COMPONENTS[node.type];
+	const icon = def ? def.icon : "?";
+	const name = nodeNames[node.id] || def?.label || node.type;
+	return `<div class="layer-item${sel}" data-id="${node.id}" onclick="selectComponent('${node.id}')">
+    <span class="layer-arrow">${(node.children || []).length > 0 ? "▾" : ""}</span>
+    <span class="layer-icon">${icon}</span>
+    <span class="layer-name">${esc(name)}</span>
+    <span class="layer-type">${def?.label || ""}</span>
+  </div>${(node.children || []).map((c) => renderLayerNode(c, depth + 1)).join("")}`;
+}
+
 /* ===== ACTIONS ===== */
 function addComponent(type) {
 	const def = COMPONENTS[type];
 	if (!def) return;
+	pushHistory();
 	const id = "c" + state.nextId++;
 	const node = { id, type, props: { ...def.props }, children: [] };
+	nodeNames[id] = generateNodeName(type);
 
 	// If a container is selected, add as its child; otherwise add to root
 	const selected = state.selectedId
@@ -1561,6 +1642,7 @@ function selectComponent(id) {
 function updateProp(id, key, value) {
 	const c = findNode(state.tree, id);
 	if (!c) return;
+	pushHistory();
 	c.props[key] = value;
 	render();
 	scheduleSave();
@@ -1568,6 +1650,7 @@ function updateProp(id, key, value) {
 
 function deleteComponent(id) {
 	if (id === "root") return;
+	pushHistory();
 	removeNode(state.tree, id);
 	if (state.selectedId === id) state.selectedId = null;
 	render();
@@ -1575,6 +1658,7 @@ function deleteComponent(id) {
 }
 
 function moveComponent(id, dir) {
+	pushHistory();
 	const parent = findParent(state.tree, id);
 	if (!parent || !parent.children) return;
 	const idx = parent.children.findIndex((x) => x.id === id);
@@ -1595,6 +1679,7 @@ function moveComponent(id, dir) {
 
 function clearAll() {
 	if (totalComponents() === 0) return;
+	pushHistory();
 	state.tree.children = [];
 	state.selectedId = null;
 	render();
@@ -1701,6 +1786,7 @@ document.addEventListener("dragover", (e) => {
 document.addEventListener("drop", (e) => {
 	e.preventDefault();
 	if (!_dragInfo) return;
+	pushHistory();
 	const canvas = document.getElementById("canvas");
 	canvas.classList.remove("drag-over-canvas");
 	document
@@ -1888,6 +1974,11 @@ document.addEventListener("keydown", (e) => {
 		state.selectedId = null;
 		render();
 	}
+	if ((e.ctrlKey || e.metaKey) && e.key === "z") {
+		if (e.shiftKey) redo();
+		else undo();
+		e.preventDefault();
+	}
 });
 
 /* ===== CODE PANEL TOGGLE ===== */
@@ -1938,6 +2029,8 @@ document.addEventListener("DOMContentLoaded", () => {
 		.addEventListener("input", renderPalette);
 	document.getElementById("btn-clear").addEventListener("click", clearAll);
 	document.getElementById("btn-export").addEventListener("click", exportDesign);
+	document.getElementById("btn-undo").addEventListener("click", undo);
+	document.getElementById("btn-redo").addEventListener("click", redo);
 	document.getElementById("btn-copy").addEventListener("click", copyCode);
 	document
 		.getElementById("btn-toggle-code")
@@ -1965,11 +2058,16 @@ document.addEventListener("DOMContentLoaded", () => {
 		.then((data) => {
 			if (data.tree && data.tree.children && data.tree.children.length > 0) {
 				state.tree = data.tree;
-				// Compute nextId from tree
+				// Compute nextId + rebuild names
 				let maxId = 0;
+				nodeNames = {};
+				nodeNameCounts = {};
 				(function walk(node) {
-					if (node.id && node.id.startsWith("c"))
+					if (node.id && node.id.startsWith("c")) {
 						maxId = Math.max(maxId, parseInt(node.id.slice(1)) || 0);
+						if (!nodeNames[node.id])
+							nodeNames[node.id] = generateNodeName(node.type);
+					}
 					for (const c of node.children || []) walk(c);
 				})(state.tree);
 				state.nextId = maxId + 1;

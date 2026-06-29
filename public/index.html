@@ -87,7 +87,13 @@
               class="search-input"
             />
           </div>
-          <div id="palette-categories"></div>
+    		  <div id="palette-body">
+            <div id="palette-categories"></div>
+            <div id="layers-section">
+              <div class="layers-header">Layers</div>
+              <div id="layers-list"></div>
+            </div>
+          </div>
           <div id="palette-resize"></div>
         </aside>
 
@@ -95,6 +101,8 @@
         <div id="center">
           <div id="canvas-toolbar">
             <span id="canvas-count">0 components</span>
+      			<button id="btn-undo" class="btn-sm" title="Undo (Ctrl+Z)" disabled>↩</button>
+            <button id="btn-redo" class="btn-sm" title="Redo (Ctrl+Shift+Z)" disabled>↪</button>
             <button id="btn-clear" class="btn-sm" title="Clear all">
               Clear
             </button>
