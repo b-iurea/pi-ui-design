@@ -83,7 +83,10 @@ function pushHistory() {
 		nodeNames: { ...nodeNames },
 	});
 	historyPtr = history.length - 1;
-	if (history.length > MAX_HISTORY) { history.shift(); historyPtr--; }
+	if (history.length > MAX_HISTORY) {
+		history.shift();
+		historyPtr--;
+	}
 	updateUndoButtons();
 }
 function initHistory() {
@@ -1790,9 +1793,9 @@ document.addEventListener("dragover", (e) => {
 });
 
 document.addEventListener("drop", (e) => {
-e.preventDefault();
-if (!_dragInfo) return;
-const canvas = document.getElementById("canvas");
+	e.preventDefault();
+	if (!_dragInfo) return;
+	const canvas = document.getElementById("canvas");
 	canvas.classList.remove("drag-over-canvas");
 	document
 		.querySelectorAll(".drag-over,.childzone-active")
@@ -1854,7 +1857,7 @@ const canvas = document.getElementById("canvas");
 			state.tree.children.splice(targetIdx, 0, item);
 		}
 
-			state.selectedId = srcId;
+		state.selectedId = srcId;
 		render();
 		scheduleSave();
 		pushHistory();
@@ -2100,7 +2103,7 @@ document.addEventListener("DOMContentLoaded", () => {
 				);
 			}
 			render();
-			initHistory();
 		})
-		.catch(() => render());
+		.catch(() => render())
+		.finally(() => initHistory());
 });
