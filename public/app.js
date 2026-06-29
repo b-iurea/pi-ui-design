@@ -1029,6 +1029,90 @@ function genReact(c, t, childrenHtml) {
 						`<label style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '0.875rem', margin: '2px 0' }}>\n    <input type="radio" name="rg" defaultChecked={${o.trim() === p.selected}} /> ${o.trim()}\n  </label>`,
 				)
 				.join("\n  ")}\n</div>`;
+		case "link":
+			return `<a href="${esc(p.href)}" style={{ color: '${t.primary}', textDecoration: 'underline' }}>${esc(p.text)}</a>`;
+		case "blockquote":
+			return `<blockquote style={{ borderLeft: '3px solid ${t.primary}', paddingLeft: '${sp}', color: '${text}99', fontStyle: 'italic', marginBottom: '${sp}' }}>${esc(p.text)}</blockquote>`;
+		case "inlineCode":
+			return `<code style={{ background: '#f3f4f6', padding: '2px 6px', borderRadius: 3, fontSize: '0.875rem' }}>${esc(p.text)}</code>`;
+		case "btnGhost":
+			return `<button style={{ background: 'transparent', color: '${text}', border: 'none', padding: '10px 24px', borderRadius: '${r}', fontWeight: 500, cursor: 'pointer' }}>
+  ${esc(p.text)}
+</button>`;
+		case "btnGroup":
+			return `<div style={{ display: 'inline-flex', border: '1px solid #d1d5db', borderRadius: '${r}', overflow: 'hidden' }}>
+  ${(p.items || "")
+		.split(",")
+		.map(
+			(i) =>
+				`    <span style={{ padding: '8px 16px', fontSize: 13, borderRight: '1px solid #d1d5db', ${i.trim() === p.active ? "background: '" + t.primary + "', color: '#fff'" : "background: '#fff', color: '#374151'"}, cursor: 'pointer' }}>${i.trim()}</span>`,
+		)
+		.join("\n")}
+</div>`;
+		case "select":
+			return `<div style={{ marginBottom: '${sp}' }}>
+  <label style={{ display: 'block', fontSize: '0.875rem', color: '${text}99', marginBottom: 4 }}>${esc(p.label || "")}</label>
+  <select style={{ width: '100%', padding: '8px 12px', border: '1px solid #d1d5db', borderRadius: '${r}', fontSize: '0.875rem', background: '#fff' }}>
+    ${(p.options || "")
+			.split(",")
+			.map((o) => `    <option>${o.trim()}</option>`)
+			.join("\n")}
+  </select>
+</div>`;
+		case "checkbox":
+			return `<label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: '0.875rem', color: '${text}', marginBottom: '${sp}' }}>
+  <input type="checkbox" defaultChecked={${p.checked}} /> ${esc(p.label)}
+</label>`;
+		case "image":
+			return `<div style={{ width: '${p.width}', height: '${p.height}', background: '#e5e7eb', borderRadius: '${r}', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#9ca3af', fontSize: '0.875rem' }}>${esc(p.alt)}</div>`;
+		case "icon":
+			return `<div style={{ fontSize: '${p.size}', color: '${t.primary}', textAlign: 'center' }}>{'${p.symbol}'}</div>`;
+		case "tabs":
+			return `<div style={{ display: 'flex', gap: 2, borderBottom: '2px solid #e5e7eb', marginBottom: '${sp}' }}>
+  ${(p.items || "")
+		.split(",")
+		.map(
+			(i) =>
+				`    <span style={{ padding: '8px 16px', fontSize: '0.875rem', cursor: 'pointer', ${i.trim() === p.active ? "color: '" + t.primary + "', fontWeight: 600, borderBottom: '2px solid " + t.primary + "', marginBottom: -2" : ""} }}>${i.trim()}</span>`,
+		)
+		.join("\n")}
+</div>`;
+		case "pagination":
+			return `<div style={{ display: 'flex', alignItems: 'center', gap: 4, margin: '${sp} 0' }}>
+  ${Array.from({ length: Math.min(p.total, 5) }, (_, i) => `<span style={{ padding: '6px 12px', border: '1px solid #d1d5db', borderRadius: 4, fontSize: '0.875rem', ${i + 1 === p.current ? "background: '" + t.primary + "', color: '#fff'" : "color: '#374151'"}, cursor: 'pointer' }}>${i + 1}</span>`).join("\n  ")}
+</div>`;
+		case "dropdown":
+			return `<div style={{ position: 'relative', display: 'inline-block', marginBottom: '${sp}' }}>
+  <span style={{ padding: '8px 16px', border: '1px solid #d1d5db', borderRadius: 4, display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: '0.875rem', color: '#374151', background: '#fff', cursor: 'pointer' }}>${esc(p.trigger)} ▾</span>
+</div>`;
+		case "toast":
+			return `<div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '12px 16px', borderRadius: '${r}', fontSize: '0.875rem', background: '#10b981', color: '#fff', boxShadow: '0 4px 12px rgba(0,0,0,0.15)', maxWidth: 320 }}>
+  ✓ ${esc(p.text)}
+</div>`;
+		case "skeleton":
+			return `<div style={{ display: 'flex', flexDirection: 'column', gap: 8, width: '${p.width}' }}>
+  ${Array.from({ length: Math.min(p.lines, 5) }, (_, i) => `<div style={{ height: 12, borderRadius: '${r}', background: 'linear-gradient(90deg,#f3f4f6 25%,#e5e7eb 50%,#f3f4f6 75%)', backgroundSize: '200% 100%', animation: 'shimmer 1.5s infinite', width: '${[100, 85, 90, 70, 95][i] || 100}%' }} />`).join("\n  ")}
+</div>`;
+		case "tooltip":
+			return `<div style={{ display: 'inline-flex', flexDirection: 'column', alignItems: 'center', gap: 4, marginBottom: '${sp}' }}>
+  <span style={{ fontSize: 13, borderBottom: '1px dashed ${text}99' }}>${esc(p.trigger)}</span>
+  <span style={{ fontSize: 11, padding: '4px 8px', borderRadius: '${r}', background: '#f3f4f6', color: '#6b7280' }}>${esc(p.text)}</span>
+</div>`;
+		case "list":
+			return `<ul style={{ listStyle: 'disc', paddingLeft: 20, color: '${text}', fontSize: '0.875rem', marginBottom: '${sp}' }}>
+  ${(p.items || "")
+		.split(",")
+		.map((i) => `  <li style={{ margin: '4px 0' }}>${i.trim()}</li>`)
+		.join("\n")}
+</ul>`;
+		case "spacer":
+			return `<div style={{ height: '${p.height}' }} />`;
+		case "rangeSlider":
+			return `<div style={{ display: 'flex', flexDirection: 'column', gap: 4, marginBottom: '${sp}' }}>
+  <div style={{ fontSize: '0.875rem', color: '${text}99' }}>${esc(p.label)}</div>
+  <input type="range" min="${p.min}" max="${p.max}" defaultValue={${p.value}} style={{ accentColor: '${t.primary}', width: '100%' }} />
+  <span style={{ fontSize: '0.875rem', color: '${text}99' }}>{${p.value}}%</span>
+</div>`;
 		default:
 			return `{/* ${c.type} */}`;
 	}
@@ -1201,6 +1285,63 @@ function genTW(c, t, childrenHtml) {
 						`<label class="flex items-center gap-1.5 text-sm text-gray-700 py-0.5"><input type="radio" name="rg" ${o.trim() === p.selected ? "checked" : ""} class="accent-blue-600"> ${o.trim()}</label>`,
 				)
 				.join("")}\n</fieldset>`;
+		case "blockquote":
+			return `<blockquote class="border-l-4 border-blue-600 pl-4 italic text-gray-400 my-4">${esc(p.text)}</blockquote>`;
+		case "inlineCode":
+			return `<code class="bg-gray-100 px-1.5 py-0.5 rounded text-sm font-mono">${esc(p.text)}</code>`;
+		case "btnGroup":
+			return `<div class="inline-flex border border-gray-300 rounded-lg overflow-hidden">
+  ${(p.items || "")
+		.split(",")
+		.map(
+			(i) =>
+				`<span class="px-4 py-2 text-sm border-r border-gray-300 last:border-r-0 ${i.trim() === p.active ? "bg-blue-600 text-white" : "bg-white text-gray-700"} cursor-pointer">${i.trim()}</span>`,
+		)
+		.join("\n  ")}
+</div>`;
+		case "select":
+			return `<div class="mb-4">
+  <label class="block text-sm text-gray-500 mb-1">${esc(p.label || "")}</label>
+  <select class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-blue-500">
+    ${(p.options || "")
+			.split(",")
+			.map((o) => `    <option>${o.trim()}</option>`)
+			.join("\n")}
+  </select>
+</div>`;
+		case "checkbox":
+			return `<label class="flex items-center gap-2 text-sm text-gray-700 mb-4">
+  <input type="checkbox" ${p.checked ? "checked" : ""} class="accent-blue-600" /> ${esc(p.label)}
+</label>`;
+		case "image":
+			return `<div class="bg-gray-200 rounded-lg flex items-center justify-center text-gray-400 text-sm" style="width:${p.width};height:${p.height}">${esc(p.alt)}</div>`;
+		case "icon":
+			return `<span class="text-blue-600 text-center" style="font-size:${p.size}">${p.symbol}</span>`;
+		case "dropdown":
+			return `<div class="relative inline-block mb-4">
+  <span class="inline-flex items-center gap-1.5 px-4 py-2 border border-gray-300 rounded text-sm bg-white text-gray-700 cursor-pointer">${esc(p.trigger)} ▾</span>
+</div>`;
+		case "toast":
+			return `<div class="flex items-center gap-2 px-4 py-3 rounded-lg text-sm bg-green-500 text-white shadow-lg max-w-xs">
+  ✓ ${esc(p.text)}
+</div>`;
+		case "skeleton":
+			return `<div class="flex flex-col gap-2" style="width:${p.width}">
+  ${Array.from({ length: Math.min(p.lines, 5) }, (_, i) => `<div class="h-3 rounded animate-pulse bg-gray-200" style="width:${[100, 85, 90, 70, 95][i] || 100}%"></div>`).join("\n  ")}
+</div>`;
+		case "tooltip":
+			return `<div class="inline-flex flex-col items-center gap-1 mb-4">
+  <span class="text-sm border-b border-dashed border-gray-400">${esc(p.trigger)}</span>
+  <span class="text-xs px-2 py-1 rounded bg-gray-100 text-gray-500">${esc(p.text)}</span>
+</div>`;
+		case "spacer":
+			return `<div style="height:${p.height}"></div>`;
+		case "rangeSlider":
+			return `<div class="flex flex-col gap-1 mb-4">
+  <div class="text-sm text-gray-500">${esc(p.label)}</div>
+  <input type="range" min="${p.min}" max="${p.max}" value="${p.value}" class="w-full accent-blue-600" />
+  <span class="text-sm text-gray-500">${p.value}%</span>
+</div>`;
 		default:
 			return `<!-- ${c.type} -->`;
 	}
@@ -1646,14 +1787,16 @@ async function saveDesign() {
 		});
 		if (res.ok) {
 			document.getElementById("save-status").textContent = "💾 Saved";
-			setTimeout(
-				() =>
-					(document.getElementById("save-status").textContent =
-						"💾 Auto-save enabled"),
-				2000,
-			);
+		} else {
+			document.getElementById("save-status").textContent = "⚠ Save failed";
 		}
-	} catch (e) {
+		setTimeout(
+			() =>
+				(document.getElementById("save-status").textContent =
+					"💾 Auto-save enabled"),
+			2000,
+		);
+	} catch {
 		document.getElementById("save-status").textContent = "⚠ Save failed";
 	}
 }

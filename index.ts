@@ -31,10 +31,20 @@ function mimeType(path: string): string {
 	return MIME[extname(path)] || "application/octet-stream";
 }
 
-function serveStatic(res: ServerResponse, filePath: string): void {
+function serveStatic(
+	res: ServerResponse,
+	filePath: string,
+	root: string,
+): void {
 	if (!existsSync(filePath)) {
 		res.writeHead(404);
 		res.end("Not found");
+		return;
+	}
+	// ponytail: guard against path traversal
+	if (!filePath.startsWith(root)) {
+		res.writeHead(403);
+		res.end("Forbidden");
 		return;
 	}
 	res.writeHead(200, { "Content-Type": mimeType(filePath) });
@@ -105,7 +115,7 @@ function startServer(port: number): Promise<number> {
 				publicDir,
 				url.pathname === "/" ? "index.html" : url.pathname,
 			);
-			serveStatic(res, filePath);
+			serveStatic(res, filePath, publicDir);
 		});
 		s.on("error", (err: NodeJS.ErrnoException) => {
 			if (err.code === "EADDRINUSE")
