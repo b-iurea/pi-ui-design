@@ -29,5 +29,9 @@
   "bugs": {
     "url": "https://github.com/biurea/pi-ui-design/issues"
   },
-  "homepage": "https://github.com/biurea/pi-ui-design#readme"
+  "homepage": "https://github.com/biurea/pi-ui-design#readme",
+  "scripts": {
+    "build:wasm": "cd wasm && emcmake cmake -B build -DCMAKE_BUILD_TYPE=Release && cmake --build build && cp build/engine.wasm build/engine.js ../public/dist/",
+    "wasm": "npm run build:wasm"
+  }
 }

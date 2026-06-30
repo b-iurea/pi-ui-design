@@ -3,28 +3,37 @@
    Supports: rect, rounded-rect, ellipse, text, image, line. */
 
 export type DrawCommand = {
-  type: number;
-  x: number; y: number; w: number; h: number;
-  r: number; g: number; b: number; a: number;
-  sr: number; sg: number; sb: number; sa: number;
-  strokeWidth: number;
-  radius: number;
-  rotation: number;
-  text: string;
-  imageId: number;
-  opacity: number;
+	type: number;
+	x: number;
+	y: number;
+	w: number;
+	h: number;
+	r: number;
+	g: number;
+	b: number;
+	a: number;
+	sr: number;
+	sg: number;
+	sb: number;
+	sa: number;
+	strokeWidth: number;
+	radius: number;
+	rotation: number;
+	text: string;
+	imageId: number;
+	opacity: number;
 };
 
 export const DrawType = {
-  RECT: 0,
-  ROUNDED_RECT: 1,
-  ELLIPSE: 2,
-  LINE: 3,
-  TEXT: 4,
-  IMAGE: 5,
-  PATH: 6,
-  GROUP_BEGIN: 7,
-  GROUP_END: 8,
+	RECT: 0,
+	ROUNDED_RECT: 1,
+	ELLIPSE: 2,
+	LINE: 3,
+	TEXT: 4,
+	IMAGE: 5,
+	PATH: 6,
+	GROUP_BEGIN: 7,
+	GROUP_END: 8,
 } as const;
 
 const VERT_SRC = `#version 300 es
@@ -72,170 +81,185 @@ void main() {
 }`;
 
 export class GLRenderer {
-  private canvas: HTMLCanvasElement;
-  private gl: WebGL2RenderingContext;
-  private program: WebGLProgram | null = null;
-  private vao: WebGLVertexArrayObject | null = null;
-  private vbo: WebGLBuffer | null = null;
-  private offsetX = 0;
-  private offsetY = 0;
-  private zoom = 1;
-  private textCanvas: HTMLCanvasElement;
-  private textCtx: CanvasRenderingContext2D;
+	private canvas: HTMLCanvasElement;
+	private gl: WebGL2RenderingContext;
+	private program: WebGLProgram | null = null;
+	private vao: WebGLVertexArrayObject | null = null;
+	private vbo: WebGLBuffer | null = null;
+	private offsetX = 0;
+	private offsetY = 0;
+	private zoom = 1;
+	private textCanvas: HTMLCanvasElement;
+	private textCtx: CanvasRenderingContext2D;
 
-  constructor(canvas: HTMLCanvasElement) {
-    this.canvas = canvas;
-    this.textCanvas = document.createElement("canvas");
-    this.textCanvas.width = 512;
-    this.textCanvas.height = 128;
-    this.textCtx = this.textCanvas.getContext("2d")!;
+	constructor(canvas: HTMLCanvasElement) {
+		this.canvas = canvas;
+		this.textCanvas = document.createElement("canvas");
+		this.textCanvas.width = 512;
+		this.textCanvas.height = 128;
+		this.textCtx = this.textCanvas.getContext("2d")!;
 
-    const gl = canvas.getContext("webgl2", {
-      alpha: false,
-      antialias: true,
-      premultipliedAlpha: false,
-    });
-    if (!gl) throw new Error("WebGL 2.0 not supported");
-    this.gl = gl;
+		const gl = canvas.getContext("webgl2", {
+			alpha: false,
+			antialias: true,
+			premultipliedAlpha: false,
+		});
+		if (!gl) throw new Error("WebGL 2.0 not supported");
+		this.gl = gl;
 
-    this.initGL();
-  }
+		this.initGL();
+	}
 
-  private initGL() {
-    const gl = this.gl;
-    const vs = gl.createShader(gl.VERTEX_SHADER)!;
-    gl.shaderSource(vs, VERT_SRC);
-    gl.compileShader(vs);
-    if (!gl.getShaderParameter(vs, gl.COMPILE_STATUS)) {
-      console.error("VS compile:", gl.getShaderInfoLog(vs));
-    }
+	private initGL() {
+		const gl = this.gl;
+		const vs = gl.createShader(gl.VERTEX_SHADER)!;
+		gl.shaderSource(vs, VERT_SRC);
+		gl.compileShader(vs);
+		if (!gl.getShaderParameter(vs, gl.COMPILE_STATUS)) {
+			console.error("VS compile:", gl.getShaderInfoLog(vs));
+		}
 
-    const fs = gl.createShader(gl.FRAGMENT_SHADER)!;
-    gl.shaderSource(fs, FRAG_SRC);
-    gl.compileShader(fs);
-    if (!gl.getShaderParameter(fs, gl.COMPILE_STATUS)) {
-      console.error("FS compile:", gl.getShaderInfoLog(fs));
-    }
+		const fs = gl.createShader(gl.FRAGMENT_SHADER)!;
+		gl.shaderSource(fs, FRAG_SRC);
+		gl.compileShader(fs);
+		if (!gl.getShaderParameter(fs, gl.COMPILE_STATUS)) {
+			console.error("FS compile:", gl.getShaderInfoLog(fs));
+		}
 
-    this.program = gl.createProgram();
-    gl.attachShader(this.program, vs);
-    gl.attachShader(this.program, fs);
-    gl.linkProgram(this.program);
-    if (!gl.getProgramParameter(this.program, gl.LINK_STATUS)) {
-      console.error("Program link:", gl.getProgramInfoLog(this.program));
-    }
+		this.program = gl.createProgram();
+		gl.attachShader(this.program, vs);
+		gl.attachShader(this.program, fs);
+		gl.linkProgram(this.program);
+		if (!gl.getProgramParameter(this.program, gl.LINK_STATUS)) {
+			console.error("Program link:", gl.getProgramInfoLog(this.program));
+		}
 
-    // Full-screen quad (two triangles)
-    const verts = new Float32Array([
-      0, 0, 0, 0,
-      1, 0, 1, 0,
-      0, 1, 0, 1,
-      1, 1, 1, 1,
-      0, 1, 0, 1,
-      1, 0, 1, 0,
-    ]);
+		// Full-screen quad (two triangles)
+		const verts = new Float32Array([
+			0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0,
+		]);
 
-    this.vao = gl.createVertexArray();
-    gl.bindVertexArray(this.vao);
-    this.vbo = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, this.vbo);
-    gl.bufferData(gl.ARRAY_BUFFER, verts, gl.STATIC_DRAW);
+		this.vao = gl.createVertexArray();
+		gl.bindVertexArray(this.vao);
+		this.vbo = gl.createBuffer();
+		gl.bindBuffer(gl.ARRAY_BUFFER, this.vbo);
+		gl.bufferData(gl.ARRAY_BUFFER, verts, gl.STATIC_DRAW);
 
-    gl.useProgram(this.program);
-    const aPos = gl.getAttribLocation(this.program, "a_pos");
-    const aUv = gl.getAttribLocation(this.program, "a_uv");
-    gl.enableVertexAttribArray(aPos);
-    gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 16, 0);
-    gl.enableVertexAttribArray(aUv);
-    gl.vertexAttribPointer(aUv, 2, gl.FLOAT, false, 16, 8);
-  }
+		gl.useProgram(this.program);
+		const aPos = gl.getAttribLocation(this.program, "a_pos");
+		const aUv = gl.getAttribLocation(this.program, "a_uv");
+		gl.enableVertexAttribArray(aPos);
+		gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 16, 0);
+		gl.enableVertexAttribArray(aUv);
+		gl.vertexAttribPointer(aUv, 2, gl.FLOAT, false, 16, 8);
+	}
 
-  setViewport(offsetX: number, offsetY: number, zoom: number) {
-    this.offsetX = offsetX;
-    this.offsetY = offsetY;
-    this.zoom = zoom;
-  }
+	setViewport(offsetX: number, offsetY: number, zoom: number) {
+		this.offsetX = offsetX;
+		this.offsetY = offsetY;
+		this.zoom = zoom;
+	}
 
-  clear(r = 0.12, g = 0.12, b = 0.12) {
-    const gl = this.gl;
-    gl.viewport(0, 0, this.canvas.width, this.canvas.height);
-    gl.clearColor(r, g, b, 1);
-    gl.clear(gl.COLOR_BUFFER_BIT);
-    gl.enable(gl.BLEND);
-    gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
-  }
+	clear(r = 0.12, g = 0.12, b = 0.12) {
+		const gl = this.gl;
+		gl.viewport(0, 0, this.canvas.width, this.canvas.height);
+		gl.clearColor(r, g, b, 1);
+		gl.clear(gl.COLOR_BUFFER_BIT);
+		gl.enable(gl.BLEND);
+		gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+	}
 
-  resize(width: number, height: number) {
-    if (this.canvas.width !== width || this.canvas.height !== height) {
-      this.canvas.width = width;
-      this.canvas.height = height;
-    }
-  }
+	resize(width: number, height: number) {
+		if (this.canvas.width !== width || this.canvas.height !== height) {
+			this.canvas.width = width;
+			this.canvas.height = height;
+		}
+	}
 
-  drawCommands(cmds: DrawCommand[]) {
-    const gl = this.gl;
-    const prog = this.program;
-    if (!prog) return;
+	drawCommands(cmds: DrawCommand[]) {
+		const gl = this.gl;
+		const prog = this.program;
+		if (!prog) return;
 
-    gl.useProgram(prog);
-    gl.bindVertexArray(this.vao);
+		gl.useProgram(prog);
+		gl.bindVertexArray(this.vao);
 
-    gl.uniform2f(gl.getUniformLocation(prog, "u_resolution"), this.canvas.width, this.canvas.height);
-    gl.uniform2f(gl.getUniformLocation(prog, "u_offset"), this.offsetX, this.offsetY);
-    gl.uniform1f(gl.getUniformLocation(prog, "u_zoom"), this.zoom);
+		gl.uniform2f(
+			gl.getUniformLocation(prog, "u_resolution"),
+			this.canvas.width,
+			this.canvas.height,
+		);
+		gl.uniform2f(
+			gl.getUniformLocation(prog, "u_offset"),
+			this.offsetX,
+			this.offsetY,
+		);
+		gl.uniform1f(gl.getUniformLocation(prog, "u_zoom"), this.zoom);
 
-    for (const cmd of cmds) {
-      switch (cmd.type) {
-        case DrawType.RECT:
-        case DrawType.ROUNDED_RECT:
-          this.drawRect(cmd, prog);
-          break;
-        case DrawType.TEXT:
-          this.drawText2D(cmd);
-          break;
-        case DrawType.ELLIPSE:
-          this.drawRect(cmd, prog);
-          break;
-        case DrawType.LINE:
-          // ponytail: line via thin rect, proper line shader deferred
-          break;
-      }
-    }
-  }
+		for (const cmd of cmds) {
+			switch (cmd.type) {
+				case DrawType.RECT:
+				case DrawType.ROUNDED_RECT:
+					this.drawRect(cmd, prog);
+					break;
+				case DrawType.TEXT:
+					this.drawText2D(cmd);
+					break;
+				case DrawType.ELLIPSE:
+					this.drawRect(cmd, prog);
+					break;
+				case DrawType.LINE:
+					// ponytail: line via thin rect, proper line shader deferred
+					break;
+			}
+		}
+	}
 
-  private drawRect(cmd: DrawCommand, prog: WebGLProgram) {
-    const gl = this.gl;
-    gl.uniform4f(gl.getUniformLocation(prog, "u_color"), cmd.r / 255, cmd.g / 255, cmd.b / 255, cmd.a / 255 * cmd.opacity);
-    gl.uniform4f(gl.getUniformLocation(prog, "u_strokeColor"), cmd.sr / 255, cmd.sg / 255, cmd.sb / 255, cmd.sa / 255);
-    gl.uniform1f(gl.getUniformLocation(prog, "u_strokeWidth"), cmd.strokeWidth);
-    gl.uniform1f(gl.getUniformLocation(prog, "u_radius"), cmd.radius);
-    gl.uniform1f(gl.getUniformLocation(prog, "u_size"), Math.max(cmd.w, cmd.h));
-    gl.drawArrays(gl.TRIANGLES, 0, 6);
-  }
+	private drawRect(cmd: DrawCommand, prog: WebGLProgram) {
+		const gl = this.gl;
+		gl.uniform4f(
+			gl.getUniformLocation(prog, "u_color"),
+			cmd.r / 255,
+			cmd.g / 255,
+			cmd.b / 255,
+			(cmd.a / 255) * cmd.opacity,
+		);
+		gl.uniform4f(
+			gl.getUniformLocation(prog, "u_strokeColor"),
+			cmd.sr / 255,
+			cmd.sg / 255,
+			cmd.sb / 255,
+			cmd.sa / 255,
+		);
+		gl.uniform1f(gl.getUniformLocation(prog, "u_strokeWidth"), cmd.strokeWidth);
+		gl.uniform1f(gl.getUniformLocation(prog, "u_radius"), cmd.radius);
+		gl.uniform1f(gl.getUniformLocation(prog, "u_size"), Math.max(cmd.w, cmd.h));
+		gl.drawArrays(gl.TRIANGLES, 0, 6);
+	}
 
-  private drawText2D(cmd: DrawCommand) {
-    if (!cmd.text) return;
-    const ctx = this.textCtx;
-    const c = this.textCanvas;
-    ctx.clearRect(0, 0, c.width, c.height);
-    ctx.font = "14px Inter, sans-serif";
-    ctx.fillStyle = `rgba(${cmd.r},${cmd.g},${cmd.b},${cmd.a / 255 * cmd.opacity})`;
-    ctx.textBaseline = "top";
-    ctx.fillText(cmd.text, 2, 2);
+	private drawText2D(cmd: DrawCommand) {
+		if (!cmd.text) return;
+		const ctx = this.textCtx;
+		const c = this.textCanvas;
+		ctx.clearRect(0, 0, c.width, c.height);
+		ctx.font = "14px Inter, sans-serif";
+		ctx.fillStyle = `rgba(${cmd.r},${cmd.g},${cmd.b},${(cmd.a / 255) * cmd.opacity})`;
+		ctx.textBaseline = "top";
+		ctx.fillText(cmd.text, 2, 2);
 
-    // Draw the text canvas onto the WebGL canvas using 2D for simplicity
-    // ponytail: proper SDF text rendering deferred. 2D overlay is simpler and fast enough.
-    const glCanvas = this.canvas;
-    const ctx2 = glCanvas.getContext("2d");
-    if (!ctx2) return;
-    const scaledX = cmd.x * this.zoom + this.offsetX;
-    const scaledY = cmd.y * this.zoom + this.offsetY;
-    ctx2.save();
-    ctx2.globalAlpha = cmd.opacity;
-    ctx2.font = "14px Inter, sans-serif";
-    ctx2.fillStyle = `rgba(${cmd.r},${cmd.g},${cmd.b},${cmd.a / 255})`;
-    ctx2.textBaseline = "top";
-    ctx2.fillText(cmd.text, scaledX, scaledY);
-    ctx2.restore();
-  }
+		// Draw the text canvas onto the WebGL canvas using 2D for simplicity
+		// ponytail: proper SDF text rendering deferred. 2D overlay is simpler and fast enough.
+		const glCanvas = this.canvas;
+		const ctx2 = glCanvas.getContext("2d");
+		if (!ctx2) return;
+		const scaledX = cmd.x * this.zoom + this.offsetX;
+		const scaledY = cmd.y * this.zoom + this.offsetY;
+		ctx2.save();
+		ctx2.globalAlpha = cmd.opacity;
+		ctx2.font = "14px Inter, sans-serif";
+		ctx2.fillStyle = `rgba(${cmd.r},${cmd.g},${cmd.b},${cmd.a / 255})`;
+		ctx2.textBaseline = "top";
+		ctx2.fillText(cmd.text, scaledX, scaledY);
+		ctx2.restore();
+	}
 }
