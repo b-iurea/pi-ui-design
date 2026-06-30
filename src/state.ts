@@ -36,7 +36,11 @@ export function createDefaultState(): State {
 
 export const S: State = createDefaultState();
 
-let _history: { tree: ComponentNode; selectedIds: string[]; nodeNames: Record<string, string> }[] = [];
+let _history: {
+	tree: ComponentNode;
+	selectedIds: string[];
+	nodeNames: Record<string, string>;
+}[] = [];
 let _historyPtr = -1;
 const MAX_HISTORY = 50;
 
@@ -130,7 +134,13 @@ export function restoreHistoryOnLoad(
 	selectedIds: string[],
 	nodeNames: Record<string, string>,
 ): void {
-	_history = [{ tree: JSON.parse(JSON.stringify(tree)), selectedIds, nodeNames: { ...nodeNames } }];
+	_history = [
+		{
+			tree: JSON.parse(JSON.stringify(tree)),
+			selectedIds,
+			nodeNames: { ...nodeNames },
+		},
+	];
 	_historyPtr = 0;
 	updateUndoBtns();
 }

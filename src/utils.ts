@@ -115,7 +115,9 @@ export function getSelectedNodes(
 	tree: ComponentNode,
 	selectedIds: Set<string>,
 ): ComponentNode[] {
-	return [...selectedIds].map((id) => findNode(tree, id)).filter(Boolean) as ComponentNode[];
+	return [...selectedIds]
+		.map((id) => findNode(tree, id))
+		.filter(Boolean) as ComponentNode[];
 }
 
 export function totalComponents(tree: ComponentNode): number {

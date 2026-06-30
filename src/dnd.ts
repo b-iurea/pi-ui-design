@@ -35,14 +35,22 @@ export function setupPaletteDrag(): void {
 		}
 		// Asset item drag (uploaded image)
 		if (asset && asset.dataset.assetId !== undefined) {
-			_dragInfo = { source: "asset", assetId: asset.dataset.assetId, isDragging: true };
+			_dragInfo = {
+				source: "asset",
+				assetId: asset.dataset.assetId,
+				isDragging: true,
+			};
 			asset.classList.add("dragging");
 			e.dataTransfer!.effectAllowed = "copy";
 			return;
 		}
 		// Icon drag
 		if (asset && asset.dataset.iconName !== undefined) {
-			_dragInfo = { source: "icon", iconName: asset.dataset.iconName, isDragging: true };
+			_dragInfo = {
+				source: "icon",
+				iconName: asset.dataset.iconName,
+				isDragging: true,
+			};
 			asset.classList.add("dragging");
 			e.dataTransfer!.effectAllowed = "copy";
 			return;
@@ -50,8 +58,18 @@ export function setupPaletteDrag(): void {
 	});
 
 	document.addEventListener("dragend", () => {
-		document.querySelectorAll(".dragging,.drag-over,.drag-over-canvas,.childzone-active")
-			.forEach((el) => el.classList.remove("dragging", "drag-over", "drag-over-canvas", "childzone-active"));
+		document
+			.querySelectorAll(
+				".dragging,.drag-over,.drag-over-canvas,.childzone-active",
+			)
+			.forEach((el) =>
+				el.classList.remove(
+					"dragging",
+					"drag-over",
+					"drag-over-canvas",
+					"childzone-active",
+				),
+			);
 		clearSnapGuides();
 		_dragInfo = null;
 	});
@@ -70,38 +88,53 @@ export function setupCanvasDragDrop(): void {
 		if (!_dragInfo) return;
 		e.preventDefault();
 		canvas.classList.add("drag-over-canvas");
-		e.dataTransfer!.dropEffect = _dragInfo.source === "palette" ? "copy" : "move";
+		e.dataTransfer!.dropEffect =
+			_dragInfo.source === "palette" ? "copy" : "move";
 
 		const childZones = canvas.querySelectorAll(".canvas-childzone");
 		childZones.forEach((zone) => {
 			const zr = (zone as HTMLElement).getBoundingClientRect();
-			if (e.clientX >= zr.left && e.clientX <= zr.right && e.clientY >= zr.top && e.clientY <= zr.bottom) {
+			if (
+				e.clientX >= zr.left &&
+				e.clientX <= zr.right &&
+				e.clientY >= zr.top &&
+				e.clientY <= zr.bottom
+			) {
 				(zone as HTMLElement).classList.add("childzone-active");
 				_dragInfo.dropParentId = (zone as HTMLElement).dataset.parent;
 			} else (zone as HTMLElement).classList.remove("childzone-active");
 		});
 		if (!_dragInfo.dropParentId) _dragInfo.dropParentId = null;
 
-		const dropZone = document.getElementById("canvas-drop-zone") as HTMLElement | null;
+		const dropZone = document.getElementById(
+			"canvas-drop-zone",
+		) as HTMLElement | null;
 		if (dropZone) {
 			const dzr = dropZone.getBoundingClientRect();
-			dropZone.style.display = e.clientY >= dzr.top && e.clientY <= dzr.bottom ? "flex" : "none";
+			dropZone.style.display =
+				e.clientY >= dzr.top && e.clientY <= dzr.bottom ? "flex" : "none";
 		}
 	});
 
 	canvas.addEventListener("drop", (e: DragEvent) => {
 		e.preventDefault();
 		canvas.classList.remove("drag-over-canvas");
-		document.querySelectorAll(".drag-over,.childzone-active")
+		document
+			.querySelectorAll(".drag-over,.childzone-active")
 			.forEach((el) => el.classList.remove("drag-over", "childzone-active"));
-		const dropZone = document.getElementById("canvas-drop-zone") as HTMLElement | null;
+		const dropZone = document.getElementById(
+			"canvas-drop-zone",
+		) as HTMLElement | null;
 		if (dropZone) dropZone.style.display = "none";
 		if (!_dragInfo) return;
 
 		if (_dragInfo.source === "palette") {
 			const type = _dragInfo.type;
 			const def = COMPONENTS[type];
-			if (!def) { _dragInfo = null; return; }
+			if (!def) {
+				_dragInfo = null;
+				return;
+			}
 			const id = nextId();
 			const node = { id, type, props: { ...def.props }, children: [] as any[] };
 			S.nodeNames[id] = genName(type, COMPONENTS as any);
@@ -118,11 +151,20 @@ export function setupCanvasDragDrop(): void {
 			pushHistory();
 		} else if (_dragInfo.source === "canvas") {
 			const srcId = _dragInfo.id;
-			if (!srcId || srcId === "root") { _dragInfo = null; return; }
+			if (!srcId || srcId === "root") {
+				_dragInfo = null;
+				return;
+			}
 			const srcParent = findParent(S.tree, srcId);
-			if (!srcParent || !srcParent.children) { _dragInfo = null; return; }
+			if (!srcParent || !srcParent.children) {
+				_dragInfo = null;
+				return;
+			}
 			const idx = srcParent.children.findIndex((x) => x.id === srcId);
-			if (idx === -1) { _dragInfo = null; return; }
+			if (idx === -1) {
+				_dragInfo = null;
+				return;
+			}
 			const [item] = srcParent.children.splice(idx, 1);
 			if (_dragInfo.dropParentId) {
 				const target = findNode(S.tree, _dragInfo.dropParentId);
