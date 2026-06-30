@@ -12,12 +12,12 @@
   <!-- ═══ TOP TOOLBAR ═══ -->
   <header id="topbar">
     <div class="tb-left">
-      <button class="tb-btn" onclick="UI.tool('select')" data-tool="select" title="Move (V)"><i class="fa-regular fa-cursor"></i></button>
+      <button class="tb-btn" onclick="UI.tool('select')" data-tool="select" title="Move (V)"><i class="fa-regular fa-hand-pointer"></i></button>
       <button class="tb-btn" onclick="UI.tool('hand')" data-tool="hand" title="Hand (H)"><i class="fa-regular fa-hand"></i></button>
       <span class="tb-sep"></span>
       <button class="tb-btn" onclick="UI.tool('frame')" data-tool="frame" title="Frame (F)"><i class="fa-regular fa-square"></i></button>
       <button class="tb-btn" onclick="UI.tool('rect')" data-tool="rect" title="Rectangle (R)"><i class="fa-regular fa-square"></i></button>
-      <button class="tb-btn" onclick="UI.tool('text')" data-tool="text" title="Text (T)"><i class="fa-regular fa-font-case"></i></button>
+      <button class="tb-btn" onclick="UI.tool('text')" data-tool="text" title="Text (T)"><i class="fa-regular fa-text-height"></i></button>
       <button class="tb-btn" onclick="UI.tool('ellipse')" data-tool="ellipse" title="Ellipse (O)"><i class="fa-regular fa-circle"></i></button>
       <button class="tb-btn" onclick="UI.tool('line')" data-tool="line" title="Line (L)"><i class="fa-regular fa-minus"></i></button>
       <span class="tb-sep"></span>
@@ -26,7 +26,7 @@
       <span class="tb-sep"></span>
       <button class="tb-btn" id="btn-duplicate" title="Duplicate (Ctrl+D)"><i class="fa-regular fa-copy"></i></button>
       <button class="tb-btn" id="btn-group" title="Group (Ctrl+G)"><i class="fa-regular fa-layer-group"></i></button>
-      <button class="tb-btn" id="btn-ungroup" title="Ungroup (Ctrl+Shift+G)"><i class="fa-regular fa-layer-minus"></i></button>
+      <button class="tb-btn" id="btn-ungroup" title="Ungroup (Ctrl+Shift+G)"><i class="fa-regular fa-layer-group"></i>⇤</button>
       <span class="tb-sep"></span>
       <button class="tb-btn" id="btn-comments" title="Comments"><i class="fa-regular fa-comment"></i></button>
     </div>
@@ -96,7 +96,7 @@
     <!-- Right: Inspector + Code + Comments -->
     <aside id="sidebar-right">
       <div class="sb-tabs">
-        <button class="sb-tab active" data-panel="inspector"><i class="fa-regular fa-pen-ruler"></i> Design</button>
+        <button class="sb-tab active" data-panel="inspector"><i class="fa-regular fa-pen-to-square"></i> Design</button>
         <button class="sb-tab" data-panel="code-output-panel"><i class="fa-regular fa-code"></i> Code</button>
         <button class="sb-tab" data-panel="comments"><i class="fa-regular fa-comment-dots"></i> Comments</button>
       </div>
@@ -153,6 +153,6 @@
   </div>
 </div>
 
-<script src="app.js"></script>
+<script src="dist/app.js"></script>
 </body>
 </html>
