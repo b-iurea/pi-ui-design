@@ -31,7 +31,7 @@
   },
   "homepage": "https://github.com/biurea/pi-ui-design#readme",
   "scripts": {
-    "build:wasm": "cd wasm && emcmake cmake -B build -DCMAKE_BUILD_TYPE=Release && cmake --build build && cp build/engine.wasm build/engine.js ../public/dist/",
+    "build:wasm": "cd wasm && bash -c 'source ../emsdk_tmp/emsdk_env.sh 2>/dev/null && emcmake cmake -B build -DCMAKE_BUILD_TYPE=Release && cmake --build build && cp build/engine.wasm build/engine.js ../public/dist/' || (echo \"Error: emscripten not found. Run: source emsdk_tmp/emsdk_env.sh\"; exit 1)",
     "wasm": "npm run build:wasm"
   }
 }
