@@ -2045,6 +2045,7 @@ const UI = (() => {
 			nodeNames: S.nodeNames,
 			nodeNameCounts: S.nodeNameCounts,
 			nextId: S.nextId,
+			assets: S.assets,
 		};
 	}
 	function exportDesign() {
@@ -2273,6 +2274,7 @@ const UI = (() => {
 				if (data.snapshots) S.snapshots = data.snapshots;
 				if (data.nodeNames) S.nodeNames = data.nodeNames;
 				if (data.nodeNameCounts) S.nodeNameCounts = data.nodeNameCounts;
+				if (data.assets) S.assets = data.assets;
 				if (data.nextId) S.nextId = data.nextId;
 				render();
 				initHistory();
