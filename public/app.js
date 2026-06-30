@@ -474,20 +474,62 @@ const UI = (() => {
 
 	/* ═══ BUILT-IN SVG ICONS (for Assets library) ═══ */
 	const BUILTIN_ICONS = [
-		{ name: "Star", svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>' },
-		{ name: "Heart", svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>' },
-		{ name: "Settings", svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>' },
-		{ name: "Mail", svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>' },
-		{ name: "Bell", svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>' },
-		{ name: "User", svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>' },
-		{ name: "Search", svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>' },
-		{ name: "Check", svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>' },
-		{ name: "X", svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>' },
-		{ name: "Menu", svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>' },
-		{ name: "Download", svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>' },
-		{ name: "Globe", svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>' },
-		{ name: "Camera", svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>' },
-		{ name: "Lock", svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>' },
+		{
+			name: "Star",
+			svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>',
+		},
+		{
+			name: "Heart",
+			svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>',
+		},
+		{
+			name: "Settings",
+			svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>',
+		},
+		{
+			name: "Mail",
+			svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>',
+		},
+		{
+			name: "Bell",
+			svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>',
+		},
+		{
+			name: "User",
+			svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>',
+		},
+		{
+			name: "Search",
+			svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>',
+		},
+		{
+			name: "Check",
+			svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>',
+		},
+		{
+			name: "X",
+			svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>',
+		},
+		{
+			name: "Menu",
+			svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>',
+		},
+		{
+			name: "Download",
+			svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>',
+		},
+		{
+			name: "Globe",
+			svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>',
+		},
+		{
+			name: "Camera",
+			svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>',
+		},
+		{
+			name: "Lock",
+			svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>',
+		},
 	];
 
 	/* ═══ RENDER PREVIEW (same logic, slightly smaller markup) ═══ */
@@ -581,7 +623,8 @@ const UI = (() => {
 			case "rangeSlider":
 				return `<div style="display:flex;flex-direction:column;gap:3px"><div style="font-size:10px;color:var(--text-muted)">${esc(p.label)}</div><input type="range" min="${p.min}" max="${p.max}" value="${p.value}" style="accent-color:${t.primary};width:100%"><span style="font-size:10px;color:var(--text-muted)">${p.value}%</span></div>`;
 			case "image":
-				if (p.src) return `<div class="cp-image" style="width:${p.width};height:${p.height};border-radius:${r};overflow:hidden;background:var(--bg)"><img src="${p.src}" alt="${esc(p.alt)}" style="width:100%;height:100%;object-fit:cover;display:block"></div>`;
+				if (p.src)
+					return `<div class="cp-image" style="width:${p.width};height:${p.height};border-radius:${r};overflow:hidden;background:var(--bg)"><img src="${p.src}" alt="${esc(p.alt)}" style="width:100%;height:100%;object-fit:cover;display:block"></div>`;
 				return `<div class="cp-image" style="width:${p.width};height:${p.height};border-radius:${r}">🖼 ${esc(p.alt)}</div>`;
 			case "avatar":
 				return `<div class="cp-avatar"><div class="circle">${esc(p.initials)}</div><div class="info"><div class="name">${esc(p.name)}</div><div class="sub">${esc(p.role)}</div></div></div>`;
@@ -916,10 +959,10 @@ const UI = (() => {
 			.getElementById("canvas-container")
 			.getBoundingClientRect();
 		handles.style.display = "block";
-		handles.style.left = r.left - cr.left + "px";
-		handles.style.top = r.top - cr.top + "px";
-		handles.style.width = r.width + "px";
-		handles.style.height = r.height + "px";
+		handles.style.left = (r.left - cr.left) / S.zoom + "px";
+		handles.style.top = (r.top - cr.top) / S.zoom + "px";
+		handles.style.width = r.width / S.zoom + "px";
+		handles.style.height = r.height / S.zoom + "px";
 		// 8 handles positioned by CSS relative to the parent
 		handles.innerHTML = "n,s,e,w,ne,nw,se,sw"
 			.split(",")
@@ -1107,7 +1150,8 @@ const UI = (() => {
 			case "spacer":
 				return `<div style="height:${p.height}"></div>`;
 			case "image":
-				if (p.src) return `<div style="width:${p.width};height:${p.height};background:#e5e7eb;border-radius:${r};display:flex;align-items:center;justify-content:center;overflow:hidden"><img src="${p.src}" alt="${esc(p.alt)}" style="width:100%;height:100%;object-fit:cover;display:block"></div>`;
+				if (p.src)
+					return `<div style="width:${p.width};height:${p.height};background:#e5e7eb;border-radius:${r};display:flex;align-items:center;justify-content:center;overflow:hidden"><img src="${p.src}" alt="${esc(p.alt)}" style="width:100%;height:100%;object-fit:cover;display:block"></div>`;
 				return `<div style="width:${p.width};height:${p.height};background:#e5e7eb;border-radius:${r};display:flex;align-items:center;justify-content:center;color:#9ca3af;font-size:.875rem">🖼 ${esc(p.alt)}</div>`;
 			case "avatar":
 				return `<div style="display:flex;align-items:center;gap:10px;margin:0 0 ${sp}"><div style="width:40px;height:40px;border-radius:50%;background:${t.primary};display:flex;align-items:center;justify-content:center;color:#fff;font-weight:600;font-size:14px">${esc(p.initials)}</div><div><div style="font-weight:600;font-size:14px">${esc(p.name)}</div><div style="font-size:12px;color:${text}99">${esc(p.role)}</div></div></div>`;
@@ -1452,8 +1496,8 @@ const UI = (() => {
 				const ri = _resizeInfo;
 				const node = findNode(S.tree, ri.id);
 				if (!node) return;
-				const dx = e.clientX - ri.startX;
-				const dy = e.clientY - ri.startY;
+				const dx = (e.clientX - ri.startX) / S.zoom;
+				const dy = (e.clientY - ri.startY) / S.zoom;
 				let w = ri.startW;
 				let h = ri.startH;
 				if (ri.dir.includes("e")) w = ri.startW + dx;
@@ -2289,22 +2333,34 @@ const UI = (() => {
 	function renderPalette() {
 		const container = document.getElementById("palette-categories");
 		if (!container) return;
-		const q = (document.getElementById("palette-search")?.value || "").toLowerCase();
+		const q = (
+			document.getElementById("palette-search")?.value || ""
+		).toLowerCase();
 		const cats = {};
 		for (const [type, def] of Object.entries(COMPONENTS)) {
-			if (q && !def.label.toLowerCase().includes(q) && !def.cat.toLowerCase().includes(q)) continue;
+			if (
+				q &&
+				!def.label.toLowerCase().includes(q) &&
+				!def.cat.toLowerCase().includes(q)
+			)
+				continue;
 			if (!cats[def.cat]) cats[def.cat] = [];
 			cats[def.cat].push({ type, ...def });
 		}
-		container.innerHTML = Object.entries(cats).map(([cat, items]) =>
-			`<div class="palette-category"><h4>${cat}</h4><div class="palette-grid">${items.map(item => {
-				const preview = renderPreview(item.type, item.props, "");
-				return `<div class="palette-item" draggable="true" data-type="${item.type}" onclick="UI.addComponent('${item.type}')">
+		container.innerHTML = Object.entries(cats)
+			.map(
+				([cat, items]) =>
+					`<div class="palette-category"><h4>${cat}</h4><div class="palette-grid">${items
+						.map((item) => {
+							const preview = renderPreview(item.type, item.props, "");
+							return `<div class="palette-item" draggable="true" data-type="${item.type}" onclick="UI.addComponent('${item.type}')">
 					<div class="palette-preview">${preview}</div>
 					<span class="label">${item.label}</span>
 				</div>`;
-			}).join("")}</div></div>`
-		).join("");
+						})
+						.join("")}</div></div>`,
+			)
+			.join("");
 	}
 
 	/* ═══ ASSETS TAB (uploaded images + built-in SVG icons) ═══ */
@@ -2314,21 +2370,28 @@ const UI = (() => {
 		renderPalette();
 		const catContainer = document.getElementById("palette-categories");
 		if (!catContainer) return;
-		const uploads = S.assets.length ? S.assets.map(a =>
-			`<div class="asset-item" draggable="true" data-asset-id="${a.id}" onclick="UI.addAssetToCanvas('${a.id}')">
+		const uploads = S.assets.length
+			? S.assets
+					.map(
+						(a) =>
+							`<div class="asset-item" draggable="true" data-asset-id="${a.id}" onclick="UI.addAssetToCanvas('${a.id}')">
 				<div class="asset-preview"><img src="${a.dataUrl}" alt="${esc(a.name)}" style="width:100%;height:100%;object-fit:cover;border-radius:3px"></div>
 				<span class="label">${esc(a.name)}</span>
-			</div>`
-		).join("") : "";
-		const iconRows = BUILTIN_ICONS.map(icon =>
-			`<div class="asset-item" draggable="true" data-icon-name="${icon.name}" onclick="UI.addIconToCanvas('${icon.name}')">
+			</div>`,
+					)
+					.join("")
+			: "";
+		const iconRows = BUILTIN_ICONS.map(
+			(icon) =>
+				`<div class="asset-item" draggable="true" data-icon-name="${icon.name}" onclick="UI.addIconToCanvas('${icon.name}')">
 				<div class="asset-preview icon-preview" style="padding:4px;display:flex;align-items:center;justify-content:center;color:var(--accent)">${icon.svg}</div>
 				<span class="label">${icon.name}</span>
-			</div>`
+			</div>`,
 		).join("");
-		catContainer.insertAdjacentHTML("afterbegin",
+		catContainer.insertAdjacentHTML(
+			"afterbegin",
 			`<div class="palette-category"><h4><i class="fa-regular fa-upload"></i> My Assets</h4><div class="palette-grid asset-grid">${uploads}<div class="asset-item upload-trigger" onclick="UI.uploadAsset()"><div class="asset-preview" style="display:flex;align-items:center;justify-content:center;border:2px dashed var(--border);border-radius:4px"><i class="fa-regular fa-plus" style="font-size:18px;color:var(--text-muted)"></i></div><span class="label">Upload</span></div></div></div>` +
-			`<div class="palette-category"><h4><i class="fa-regular fa-icons"></i> Icons</h4><div class="palette-grid icon-grid">${iconRows}</div></div>`
+				`<div class="palette-category"><h4><i class="fa-regular fa-icons"></i> Icons</h4><div class="palette-grid icon-grid">${iconRows}</div></div>`,
 		);
 	}
 
@@ -2349,19 +2412,45 @@ const UI = (() => {
 			const item = e.target.closest(".palette-item");
 			const asset = e.target.closest(".asset-item");
 			const comp = e.target.closest(".canvas-component");
-			// Asset item (image or icon) — trigger click handler instead of drag
-			if (asset && !item) {
-				asset.classList.add("dragging");
-				_dragInfo = { source: "asset", el: asset, isDragging: true };
-				e.dataTransfer.effectAllowed = "copy";
-				return;
-			}
-			if (item) {
+			// Canvas component reorder drag
+			if (comp) {
 				const id = comp.dataset.id;
 				_dragInfo = { source: "canvas", id, isDragging: true };
 				comp.classList.add("dragging");
 				e.dataTransfer.effectAllowed = "move";
 				e.dataTransfer.setData("text/plain", id);
+				return;
+			}
+			// Palette component type drag
+			if (item) {
+				const type = item.dataset.type;
+				_dragInfo = { source: "palette", type, isDragging: true };
+				item.classList.add("dragging");
+				e.dataTransfer.effectAllowed = "copy";
+				e.dataTransfer.setData("text/plain", type);
+				return;
+			}
+			// Asset item drag (uploaded image)
+			if (asset && asset.dataset.assetId) {
+				_dragInfo = {
+					source: "asset",
+					assetId: asset.dataset.assetId,
+					isDragging: true,
+				};
+				asset.classList.add("dragging");
+				e.dataTransfer.effectAllowed = "copy";
+				return;
+			}
+			// Icon drag
+			if (asset && asset.dataset.iconName) {
+				_dragInfo = {
+					source: "icon",
+					iconName: asset.dataset.iconName,
+					isDragging: true,
+				};
+				asset.classList.add("dragging");
+				e.dataTransfer.effectAllowed = "copy";
+				return;
 			}
 		});
 		document.addEventListener("dragend", () => {
@@ -2462,6 +2551,10 @@ const UI = (() => {
 				render();
 				scheduleSave();
 				pushHistory();
+			} else if (_dragInfo.source === "asset") {
+				addAssetToCanvas(_dragInfo.assetId);
+			} else if (_dragInfo.source === "icon") {
+				addIconToCanvas(_dragInfo.iconName);
 			}
 			_dragInfo = null;
 		});
@@ -2491,7 +2584,12 @@ const UI = (() => {
 			if (!file) return;
 			const reader = new FileReader();
 			reader.onload = () => {
-				S.assets.push({ id: "a" + Date.now(), name: file.name, dataUrl: reader.result, type: "image" });
+				S.assets.push({
+					id: "a" + Date.now(),
+					name: file.name,
+					dataUrl: reader.result,
+					type: "image",
+				});
 				render();
 				toast("Asset added");
 			};
@@ -2500,26 +2598,49 @@ const UI = (() => {
 		input.click();
 	}
 	function addAssetToCanvas(assetId) {
-		const asset = S.assets.find(a => a.id === assetId);
+		const asset = S.assets.find((a) => a.id === assetId);
 		if (!asset) return;
 		const id = nextId();
-		const node = { id, type: "image", props: { alt: asset.name, src: asset.dataUrl, width: "200px", height: "160px" }, children: [] };
+		const node = {
+			id,
+			type: "image",
+			props: {
+				alt: asset.name,
+				src: asset.dataUrl,
+				width: "200px",
+				height: "160px",
+			},
+			children: [],
+		};
 		S.nodeNames[id] = asset.name;
-		const sel = S.selectedIds.size === 1 ? findNode(S.tree, [...S.selectedIds][0]) : null;
-		if (sel && isContainer(sel.type)) { sel.children.push(node); }
-		else { S.tree.children.push(node); }
+		const sel =
+			S.selectedIds.size === 1 ? findNode(S.tree, [...S.selectedIds][0]) : null;
+		if (sel && isContainer(sel.type)) {
+			sel.children.push(node);
+		} else {
+			S.tree.children.push(node);
+		}
 		S.selectedIds = new Set([id]);
-		render(); scheduleSave(); pushHistory();
+		render();
+		scheduleSave();
+		pushHistory();
 	}
 	function addIconToCanvas(iconName) {
-		const icon = BUILTIN_ICONS.find(i => i.name === iconName);
+		const icon = BUILTIN_ICONS.find((i) => i.name === iconName);
 		if (!icon) return;
 		const id = nextId();
-		const node = { id, type: "icon", props: { symbol: icon.svg, size: "24px" }, children: [] };
+		const node = {
+			id,
+			type: "icon",
+			props: { symbol: icon.svg, size: "24px" },
+			children: [],
+		};
 		S.nodeNames[id] = iconName;
 		S.tree.children.push(node);
 		S.selectedIds = new Set([id]);
-		render(); scheduleSave(); pushHistory();
+		render();
+		scheduleSave();
+		pushHistory();
 	}
 
 	/* ═══ PUBLIC API ═══ */
