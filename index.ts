@@ -16,6 +16,7 @@ const UI_DIR = ".ui-design";
 
 let server: ReturnType<typeof createServer> | null = null;
 let serverPort = 0;
+const serverSockets = new Set<import("net").Socket>();
 
 const MIME: Record<string, string> = {
 	".html": "text/html",
@@ -117,6 +118,10 @@ function startServer(port: number): Promise<number> {
 			);
 			serveStatic(res, filePath, publicDir);
 		});
+		s.on("connection", (socket) => {
+			serverSockets.add(socket);
+			socket.on("close", () => serverSockets.delete(socket));
+		});
 		s.on("error", (err: NodeJS.ErrnoException) => {
 			if (err.code === "EADDRINUSE")
 				reject(new Error(`Port ${port} is in use`));
@@ -131,11 +136,24 @@ function startServer(port: number): Promise<number> {
 }
 
 function stopServer(): void {
-	if (server) {
-		server.close();
+	if (!server) return;
+	// Force-destroy all open sockets so the port releases immediately
+	for (const socket of serverSockets) {
+		socket.destroy();
+	}
+	serverSockets.clear();
+	server.close(() => {
 		server = null;
 		serverPort = 0;
-	}
+	});
+	// Fallback: if close callback never fires, clean up anyway
+	setTimeout(() => {
+		if (server) {
+			server.close();
+			server = null;
+			serverPort = 0;
+		}
+	}, 2000);
 }
 
 function openBrowser(url: string): void {
@@ -241,15 +259,11 @@ export default function (pi: ExtensionAPI) {
 				}
 			}
 
-			// ponytail: clear instruction at the end so LLM sees it right after the prototype
-			const skeletonHtml = html;
-			const theme = (design as any).theme || {};
-
 			return {
 				content: [{ type: "text", text: html }],
 				details: {
-					skeletonHtml,
-					theme,
+					skeletonHtml: html,
+					theme: (design as any).theme || {},
 					componentTree: design,
 					source: htmlPath,
 					instructions: [
@@ -261,11 +275,12 @@ export default function (pi: ExtensionAPI) {
 						"  • Responsive layout (mobile-first)",
 						"  • Accessible markup and semantic HTML",
 						"  • Subtle animations / micro-interactions",
-						"Theme colors from prototype: " + JSON.stringify(theme),
+						"Theme colors from prototype: " +
+							JSON.stringify((design as any).theme || {}),
 						"Use the theme as a hint (not a constraint) — feel free to design a richer palette.",
 					].join("\n"),
 				},
-			};
+			} as any;
 		},
 	});
 
